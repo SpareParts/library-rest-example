@@ -1,0 +1,24 @@
+# Dependencies
+/vendor/
+composer.lock
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.phpunit.result.cache
+.php-cs-fixer.cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore

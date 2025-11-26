@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library REST API - Test Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .dev-warning {
+            background: #ff9800;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .response-section {
+            border-top: 2px solid #f0f0f0;
+            padding-top: 20px;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .response-header h3 {
+            color: #555;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-error {
+            background: #f44336;
+            color: white;
+        }
+
+        .status-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .response-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .response-display {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            min-height: 200px;
+            max-height: 500px;
+            overflow: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .response-display.empty {
+            color: #999;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+
+        .copy-btn:active {
+            background: #4451b8;
+        }
+
+        .history-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .history-section h3 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:hover {
+            background: #e9ecef;
+        }
+
+        .history-method {
+            font-weight: 600;
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        .history-timestamp {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .endpoint-info {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .endpoint-info strong {
+            color: #1976d2;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dev-warning">
+        DEVELOPMENT ONLY - NOT FOR PRODUCTION USE
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Library REST API</h1>
+            <p>Test Interface for Developer Convenience</p>
+        </div>
+
+        <div class="content">
+            <div class="form-group">
+                <label for="endpoint">Select Endpoint</label>
+                <select id="endpoint">
+                    <option value="">-- Choose an endpoint --</option>
+                    <option value="0">List All Books</option>
+                    <option value="1">Get Book by ID</option>
+                    <option value="2">Borrow Book</option>
+                    <option value="3">Return Book</option>
+                </select>
+            </div>
+
+            <div class="endpoint-info" id="endpointInfo" style="display: none;">
+                <strong>Method:</strong> <span id="methodDisplay"></span><br>
+                <strong>Path:</strong> <span id="pathDisplay"></span>
+            </div>
+
+            <div class="form-group" id="bookIdGroup" style="display: none;">
+                <label for="bookId">Book ID</label>
+                <input type="number" id="bookId" placeholder="Enter book ID (e.g., 1-5)" min="1">
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" id="executeBtn" disabled>
+                    Execute Request
+                </button>
+                <button class="btn-secondary" id="clearBtn">
+                    Clear
+                </button>
+            </div>
+
+            <div class="response-section">
+                <div class="response-header">
+                    <h3>Response</h3>
+                    <button class="copy-btn" id="copyBtn" style="display: none;">
+                        Copy to Clipboard
+                    </button>
+                </div>
+                <div class="response-meta" id="responseMeta" style="display: none;">
+                    <span>Status: <span id="statusDisplay"></span></span>
+                    <span>Time: <span id="timeDisplay"></span></span>
+                </div>
+                <div class="response-display empty" id="responseDisplay">
+                    No response yet. Select an endpoint and click "Execute Request".
+                </div>
+            </div>
+
+            <div class="history-section">
+                <h3>Request History</h3>
+                <ul class="history-list" id="historyList">
+                    <li style="color: #999; font-style: italic;">No requests yet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Endpoint configuration
+        const endpoints = [
+            {
+                name: 'List All Books',
+                method: 'GET',
+                path: '/books',
+                requiresId: false
+            },
+            {
+                name: 'Get Book by ID',
+                method: 'GET',
+                path: '/books/{id}',
+                requiresId: true
+            },
+            {
+                name: 'Borrow Book',
+                method: 'POST',
+                path: '/books/{id}/borrow',
+                requiresId: true
+            },
+            {
+                name: 'Return Book',
+                method: 'POST',
+                path: '/books/{id}/return',
+                requiresId: true
+            }
+        ];
+
+        // DOM elements
+        const endpointSelect = document.getElementById('endpoint');
+        const bookIdGroup = document.getElementById('bookIdGroup');
+        const bookIdInput = document.getElementById('bookId');
+        const executeBtn = document.getElementById('executeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const responseDisplay = document.getElementById('responseDisplay');
+        const responseMeta = document.getElementById('responseMeta');
+        const statusDisplay = document.getElementById('statusDisplay');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const copyBtn = document.getElementById('copyBtn');
+        const historyList = document.getElementById('historyList');
+        const endpointInfo = document.getElementById('endpointInfo');
+        const methodDisplay = document.getElementById('methodDisplay');
+        const pathDisplay = document.getElementById('pathDisplay');
+
+        // State
+        let currentResponse = null;
+        let requestHistory = [];
+
+        // Load history from localStorage
+        function loadHistory() {
+            const saved = localStorage.getItem('apiTestHistory');
+            if (saved) {
+                requestHistory = JSON.parse(saved);
+                renderHistory();
+            }
+        }
+
+        // Save history to localStorage
+        function saveHistory() {
+            // Keep only last 10 requests
+            if (requestHistory.length > 10) {
+                requestHistory = requestHistory.slice(-10);
+            }
+            localStorage.setItem('apiTestHistory', JSON.stringify(requestHistory));
+        }
+
+        // Render history list
+        function renderHistory() {
+            if (requestHistory.length === 0) {
+                historyList.innerHTML = '<li style="color: #999; font-style: italic;">No requests yet</li>';
+                return;
+            }
+
+            historyList.innerHTML = requestHistory.map((item, index) => `
+                <li class="history-item" onclick="loadFromHistory(${index})">
+                    <div>
+                        <span class="history-method">${item.method}</span>
+                        <span>${item.path}</span>
+                    </div>
+                    <span class="history-timestamp">${item.timestamp}</span>
+                </li>
+            `).reverse().join('');
+        }
+
+        // Load request from history
+        window.loadFromHistory = function(index) {
+            const item = requestHistory[index];
+            const endpointIndex = endpoints.findIndex(e => e.path === item.endpoint && e.method === item.method);
+            
+            if (endpointIndex !== -1) {
+                endpointSelect.value = endpointIndex;
+                updateEndpointUI();
+                
+                if (item.bookId) {
+                    bookIdInput.value = item.bookId;
+                }
+                
+                displayResponse(item.response, item.status);
+            }
+        };
+
+        // Update UI when endpoint changes
+        function updateEndpointUI() {
+            const selectedIndex = endpointSelect.value;
+            
+            if (selectedIndex === '') {
+                bookIdGroup.style.display = 'none';
+                endpointInfo.style.display = 'none';
+                executeBtn.disabled = true;
+                return;
+            }
+
+            const endpoint = endpoints[selectedIndex];
+            
+            // Show endpoint info
+            endpointInfo.style.display = 'block';
+            methodDisplay.textContent = endpoint.method;
+            pathDisplay.textContent = endpoint.path;
+            
+            // Show/hide book ID input
+            if (endpoint.requiresId) {
+                bookIdGroup.style.display = 'block';
+                executeBtn.disabled = bookIdInput.value.trim() === '';
+            } else {
+                bookIdGroup.style.display = 'none';
+                bookIdInput.value = '';
+                executeBtn.disabled = false;
+            }
+        }
+
+        // Execute API request
+        async function executeRequest() {
+            const selectedIndex = endpointSelect.value;
+            if (selectedIndex === '') return;
+
+            const endpoint = endpoints[selectedIndex];
+            let path = endpoint.path;
+
+            // Replace {id} with actual book ID
+            if (endpoint.requiresId) {
+                const bookId = bookIdInput.value.trim();
+                if (!bookId) {
+                    alert('Please enter a book ID');
+                    return;
+                }
+                path = path.replace('{id}', bookId);
+            }
+
+            // Disable button and show loading
+            executeBtn.disabled = true;
+            executeBtn.innerHTML = 'Executing...<span class="loading"></span>';
+
+            try {
+                const response = await fetch(path, {
+                    method: endpoint.method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                const status = response.status;
+
+                // Display response
+                displayResponse(data, status);
+
+                // Add to history
+                const historyItem = {
+                    method: endpoint.method,
+                    endpoint: endpoint.path,
+                    path: path,
+                    bookId: endpoint.requiresId ? bookIdInput.value : null,
+                    timestamp: new Date().toLocaleString(),
+                    response: data,
+                    status: status
+                };
+                requestHistory.push(historyItem);
+                saveHistory();
+                renderHistory();
+
+            } catch (error) {
+                displayResponse({
+                    error: `Network error: ${error.message}`,
+                    details: 'Could not connect to the API server. Make sure it is running.'
+                }, 0);
+            } finally {
+                // Re-enable button
+                executeBtn.disabled = false;
+                executeBtn.textContent = 'Execute Request';
+            }
+        }
+
+        // Display response
+        function displayResponse(data, status) {
+            currentResponse = data;
+            
+            // Update response display
+            responseDisplay.classList.remove('empty');
+            responseDisplay.textContent = JSON.stringify(data, null, 2);
+
+            // Update meta information
+            responseMeta.style.display = 'flex';
+            copyBtn.style.display = 'block';
+
+            // Status badge
+            let statusClass = 'status-error';
+            let statusText = status || 'Network Error';
+
+            if (status >= 200 && status < 300) {
+                statusClass = 'status-success';
+                statusText = `${status} OK`;
+            } else if (status >= 400 && status < 500) {
+                statusClass = 'status-warning';
+                statusText = `${status} Client Error`;
+            } else if (status >= 500) {
+                statusClass = 'status-error';
+                statusText = `${status} Server Error`;
+            }
+
+            statusDisplay.innerHTML = `<span class="status-badge ${statusClass}">${statusText}</span>`;
+            timeDisplay.textContent = new Date().toLocaleString();
+        }
+
+        // Clear form and response
+        function clearForm() {
+            endpointSelect.value = '';
+            bookIdInput.value = '';
+            responseDisplay.classList.add('empty');
+            responseDisplay.textContent = 'No response yet. Select an endpoint and click "Execute Request".';
+            responseMeta.style.display = 'none';
+            copyBtn.style.display = 'none';
+            currentResponse = null;
+            updateEndpointUI();
+        }
+
+        // Copy response to clipboard
+        async function copyToClipboard() {
+            if (!currentResponse) return;
+
+            try {
+                await navigator.clipboard.writeText(JSON.stringify(currentResponse, null, 2));
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            } catch (error) {
+                alert('Failed to copy to clipboard');
+            }
+        }
+
+        // Event listeners
+        endpointSelect.addEventListener('change', updateEndpointUI);
+        bookIdInput.addEventListener('input', () => {
+            const selectedIndex = endpointSelect.value;
+            if (selectedIndex !== '') {
+                const endpoint = endpoints[selectedIndex];
+                executeBtn.disabled = endpoint.requiresId && bookIdInput.value.trim() === '';
+            }
+        });
+        executeBtn.addEventListener('click', executeRequest);
+        clearBtn.addEventListener('click', clearForm);
+        copyBtn.addEventListener('click', copyToClipboard);
+
+        // Allow Enter key to execute request
+        bookIdInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !executeBtn.disabled) {
+                executeRequest();
+            }
+        });
+
+        // Initialize
+        loadHistory();
+    </script>
+</body>
+</html>

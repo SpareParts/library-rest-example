@@ -1,0 +1,53 @@
+{
+    "name": "library/rest-api",
+    "type": "project",
+    "description": "Library REST API application",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpstan/phpstan": "^1.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:unit": "phpunit --testsuite Unit",
+        "test:integration": "phpunit --testsuite Integration",
+        "test:coverage": "phpunit --coverage-html coverage",
+        "lint": "php-cs-fixer fix",
+        "lint:check": "php-cs-fixer fix --dry-run --diff",
+        "analyse": "phpstan analyse",
+        "db:seed": "php database/seed.php",
+        "check": [
+            "@lint:check",
+            "@analyse",
+            "@test"
+        ],
+        "fix": [
+            "@lint",
+            "@test"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

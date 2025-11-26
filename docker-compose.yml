@@ -1,0 +1,42 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library-api-php
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/src
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: library
+      DB_USERNAME: library_user
+      DB_PASSWORD: secret
+    depends_on:
+      - mysql
+    networks:
+      - library-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: library-api-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_secret
+      MYSQL_DATABASE: library
+      MYSQL_USER: library_user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - library-network
+
+volumes:
+  mysql-data:
+
+networks:
+  library-network:
+    driver: bridge
