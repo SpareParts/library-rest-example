@@ -30,8 +30,13 @@ The API tracks book availability and borrowing history in a MySQL database.
 
 ### Step 1: Start the Application
 
-All commands must be run inside the Docker container. Start the environment:
+Create your own `.env` file by creating a copy of the provided `.env.example` file:
 
+```bash
+cp .env.example .env
+```
+
+Start the environment:
 ```bash
 docker-compose up -d --build
 ```
