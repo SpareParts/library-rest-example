@@ -49,15 +49,16 @@ To run commands, you need to be inside the PHP container:
 docker-compose exec php bash
 ```
 
-### Step 3: Set Up the Database
+### Step 3: Set Up the Libraries & Database
 
 Inside the container, run:
 
 ```bash
+composer install
 composer db:seed
 ```
 
-This will create the database schema and insert sample books.
+This will install libraries & dependencies, create the database schema and insert sample books.
 
 **Note:** The PHP development server starts automatically when the container starts on `http://localhost:8000`. You don't need to start it manually!
 
