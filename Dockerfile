@@ -21,7 +21,8 @@ WORKDIR /src
 COPY . /src
 
 # Install dependencies
-RUN if [ -f composer.json ]; then composer install --no-interaction --optimize-autoloader; fi
+# no reason to run composer install at build time for local development, skipped
+# RUN if [ -f composer.json ]; then composer install --no-interaction --optimize-autoloader; fi
 
 # Expose port 8000 for PHP built-in server
 EXPOSE 8000
